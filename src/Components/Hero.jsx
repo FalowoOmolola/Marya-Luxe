@@ -5,10 +5,8 @@ import HeroImg from '../assets/HeroImg.jpeg';
 
 const Hero = () => {
     return (
-        // Removed 'max-w-5xl' and 'px-4' to allow full-screen width
         <section className="relative w-full h-[85vh] lg:h-screen overflow-hidden bg-[#FAF9F6]">
 
-            {/* 1. The Background Image: covers 100% of the side and height */}
             <motion.div
                 initial={{ scale: 1.2, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
@@ -18,7 +16,6 @@ const Hero = () => {
                 <img
                     src={HeroImg}
                     alt="Marya Luxe Hero"
-                    // 'object-cover' ensures the image fills the space without stretching
                     className="w-full h-full object-cover"
                 />
                 {/* Subtle dark overlay to make white text pop */}

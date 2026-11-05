@@ -3,9 +3,10 @@ import { motion } from 'framer-motion';
 import HeroImg from '../assets/HeroImg.jpeg';
 
 const About = () => (
-  <motion.div 
-    initial={{ opacity: 0, y: 20 }} 
-    animate={{ opacity: 1, y: 0 }} 
+  <motion.div
+    initial={{ scale: 1.2, opacity: 0 }}
+    animate={{ scale: 1, opacity: 1 }}
+    transition={{ duration: 1.5, ease: "easeOut" }}
     className="pt-32 pb-20 bg-[#FAF9F6] min-h-screen px-6 text-center max-w-4xl mx-auto"
   >
     <span className="text-[#D4AF37] tracking-widest text-xs uppercase font-bold">Our Philosophy</span>

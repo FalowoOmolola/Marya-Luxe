@@ -24,17 +24,17 @@ const Hero = () => {
             </motion.div>
 
             {/* 2. Centered Content Overlay */}
-            <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-6">
+            <div className="relative z-10 flex h-full flex-col items-center justify-start px-6 pt-28 text-center md:pt-36">
                 <motion.div
                     initial={{ opacity: 0, y: 24 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.55, duration: 0.8 }}
-                    className="rounded-3xl border border-white/50 bg-[#FAF9F6]/75 px-7 py-8 shadow-2xl backdrop-blur-sm md:px-12"
+                    className="px-4 py-5"
                 >
-                    <h1 className="text-[#2D2D2D] text-5xl md:text-7xl font-serif mb-5 italic">
+                    <h1 className="text-white text-5xl md:text-7xl font-serif mb-5 italic drop-shadow-[0_2px_16px_rgba(0,0,0,0.35)]">
                         Indulge Everyday Luxury
                     </h1>
-                    <p className="text-gray-700 text-lg md:text-xl font-light italic mb-8 tracking-wide">
+                    <p className="text-white/90 text-lg md:text-xl font-light italic mb-8 tracking-wide">
                         Soft, radiant, effortlessly you
                     </p>
                     <Link to="/shop" className="inline-flex rounded-full bg-[#2D2D2D] px-7 py-3 text-sm font-bold uppercase tracking-[0.16em] text-white transition-colors hover:bg-[#D4AF37]">

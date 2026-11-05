@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 import { db } from '../firebase';
 import { doc, setDoc, onSnapshot } from 'firebase/firestore';
 import { useAuth } from './AuthContext';
@@ -8,6 +8,8 @@ const CartContext = createContext();
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]); // Standardized name
   const [loading, setLoading] = useState(true); // Prevents wiping data on load
+  const [cartNotice, setCartNotice] = useState(null);
+  const noticeTimer = useRef(null);
   const { user } = useAuth();
 
   // 1. LOAD FROM FIREBASE
@@ -22,7 +24,8 @@ export const CartProvider = ({ children }) => {
       });
       return () => unsubscribe();
     } else {
-      setCartItems([]);
+      const savedGuestCart = localStorage.getItem('marya-guest-cart');
+      setCartItems(savedGuestCart ? JSON.parse(savedGuestCart) : []);
       setLoading(false);
     }
   }, [user]);
@@ -34,6 +37,8 @@ export const CartProvider = ({ children }) => {
       if (user && !loading) {
         const cartRef = doc(db, "carts", user.uid);
         await setDoc(cartRef, { items: cartItems }, { merge: true });
+      } else if (!user && !loading) {
+        localStorage.setItem('marya-guest-cart', JSON.stringify(cartItems));
       }
     };
     saveToFirebase();
@@ -49,7 +54,17 @@ export const CartProvider = ({ children }) => {
       }
       return [...prev, { ...product, quantity: 1 }];
     });
+    setCartNotice(product);
+    clearTimeout(noticeTimer.current);
+    noticeTimer.current = setTimeout(() => setCartNotice(null), 3500);
   };
+
+  const dismissCartNotice = () => {
+    clearTimeout(noticeTimer.current);
+    setCartNotice(null);
+  };
+
+  useEffect(() => () => clearTimeout(noticeTimer.current), []);
 
   const removeFromCart = (id) => {
     setCartItems((prev) => 
@@ -73,7 +88,9 @@ export const CartProvider = ({ children }) => {
       addToCart, 
       removeFromCart, 
       cartCount, 
-      cartTotal 
+      cartTotal,
+      cartNotice,
+      dismissCartNotice
     }}>
       {children}
     </CartContext.Provider>

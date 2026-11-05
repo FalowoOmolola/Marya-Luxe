@@ -17,11 +17,7 @@ const Footer = () => {
             </div>
           </div>
           
-          <div className="text-right">
-            <Link to="/legal" className="text-xs text-gray-500 uppercase tracking-widest hover:text-[#D4AF37]">
-              Legal &gt;
-            </Link>
-          </div>
+          <div className="text-right text-xs text-gray-500 uppercase tracking-widest">Marya Luxe</div>
         </div>
 
         {/* Social Icons matching your design */}
@@ -34,7 +30,7 @@ const Footer = () => {
 
       {/* Floating WhatsApp Button from your mockup */}
       <a 
-        href="https://wa.me/yournumber" 
+        href="https://wa.me/2347041490128?text=Hello%20Marya%20Luxe%2C%20I%27m%20interested%20in%20your%20products."
         target="_blank" 
         rel="noopener noreferrer"
         className="bg-[#25D366] p-3 rounded-full absolute -top-6 right-6 shadow-lg cursor-pointer hover:scale-110 transition-transform"

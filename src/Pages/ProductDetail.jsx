@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react'; // Added useEffect and useState
 import { motion } from 'framer-motion';
 import { useParams, Link } from 'react-router-dom';
-import { ShoppingBag, Heart, ArrowLeft } from 'lucide-react';
+import { ShoppingBag, Heart, ArrowLeft, ShieldCheck, Sparkles, Truck } from 'lucide-react';
 import { useCart } from '../Context/CartContext';
 import { doc, getDoc } from 'firebase/firestore'; // Import Firestore functions
 import { db } from '../firebase';
+import { featuredProducts } from '../data/featuredProducts';
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -15,6 +16,13 @@ const ProductDetail = () => {
   // 1. Fetch the real product from Firebase
   useEffect(() => {
     const fetchProduct = async () => {
+      const featuredProduct = featuredProducts.find((item) => item.id === id);
+      if (featuredProduct) {
+        setProduct(featuredProduct);
+        setLoading(false);
+        return;
+      }
+
       try {
         const docRef = doc(db, "products", id);
         const docSnap = await getDoc(docRef);
@@ -22,7 +30,7 @@ const ProductDetail = () => {
         if (docSnap.exists()) {
           setProduct({ id: docSnap.id, ...docSnap.data() });
         } else {
-          console.log("No such product!");
+          setProduct(null);
         }
       } catch (error) {
         console.error("Error fetching product:", error);
@@ -36,13 +44,31 @@ const ProductDetail = () => {
   const handleAddClick = () => {
     if (product) {
       addToCart(product);
-      // Optional: Add a small visual feedback
-      alert(`${product.name} added to bag!`);
     }
   };
 
   if (loading) return <div className="pt-40 text-center font-serif italic">Loading Luxe...</div>;
   if (!product) return <div className="pt-40 text-center font-serif italic">Product not found.</div>;
+
+  const careNotes = {
+    Wellness: {
+      howToUse: 'Follow the instructions on the product label. Supplements work best as part of a balanced daily routine.',
+      details: 'Keep in a cool, dry place and check the label for ingredients, serving size, and suitability before use.',
+    },
+    Skincare: {
+      howToUse: 'Apply to clean skin as directed. Patch test before first use and discontinue use if irritation occurs.',
+      details: 'Check the product label for the complete ingredient list and recommended routine order.',
+    },
+    Jewelry: {
+      howToUse: 'Style solo for a subtle finish or layer with your favourite Marya Luxe pieces.',
+      details: 'Store dry and avoid perfume, lotions, and water to help preserve the finish.',
+    },
+  };
+  const productNotes = careNotes[product.category] || {
+    howToUse: 'Enjoy this thoughtfully selected Marya Luxe essential as part of your everyday routine.',
+    details: 'See the product packaging for full care and product information.',
+  };
+  const relatedProducts = featuredProducts.filter((item) => item.category === product.category && item.id !== product.id).slice(0, 3);
 
   return (
     <div className="pt-32 pb-20 bg-white min-h-screen px-6">
@@ -60,7 +86,7 @@ const ProductDetail = () => {
           >
             {/* 2. Image path: If using 'public' folder, use /image.png */}
             <img 
-               src={product.image.startsWith('http') ? product.image : `/${product.image}`} 
+               src={product.image.startsWith('http') || product.image.startsWith('/') ? product.image : `/${product.image}`}
                className="w-full h-auto rounded-2xl shadow-2xl" 
                alt={product.name} 
             />
@@ -88,8 +114,42 @@ const ProductDetail = () => {
                 <Heart size={24} className="text-gray-300 group-hover:text-red-500 transition-colors" />
               </button>
             </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 border-t border-gray-100 pt-7 text-sm text-gray-600">
+              <div className="flex items-start gap-2"><Truck size={18} className="shrink-0 text-[#D4AF37]" /><span>Delivery details confirmed after your order.</span></div>
+              <div className="flex items-start gap-2"><ShieldCheck size={18} className="shrink-0 text-[#D4AF37]" /><span>Order securely via our verified WhatsApp line.</span></div>
+              <div className="flex items-start gap-2"><Sparkles size={18} className="shrink-0 text-[#D4AF37]" /><span>Thoughtfully selected for your soft-life routine.</span></div>
+            </div>
           </div>
         </div>
+
+        <section className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="rounded-2xl bg-[#FAF9F6] p-7">
+            <h2 className="font-serif text-xl text-[#2D2D2D] mb-3">How to enjoy</h2>
+            <p className="text-sm leading-relaxed text-gray-600">{productNotes.howToUse}</p>
+          </div>
+          <div className="rounded-2xl bg-[#FAF9F6] p-7">
+            <h2 className="font-serif text-xl text-[#2D2D2D] mb-3">Product details & care</h2>
+            <p className="text-sm leading-relaxed text-gray-600">{productNotes.details}</p>
+          </div>
+        </section>
+
+        {relatedProducts.length > 0 && (
+          <section className="mt-16">
+            <h2 className="mb-6 text-2xl font-serif italic text-[#2D2D2D]">You may also like</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+              {relatedProducts.map((item) => (
+                <Link key={item.id} to={`/product/${item.id}`} className="group rounded-2xl bg-[#FAF9F6] overflow-hidden">
+                  <img src={item.image} alt={item.name} className="aspect-square w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                  <div className="p-4">
+                    <h3 className="font-serif text-gray-800">{item.name}</h3>
+                    <p className="mt-1 text-sm text-[#D4AF37]">₦{item.price.toLocaleString()}</p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
       </div>
     </div>
   );

@@ -90,7 +90,7 @@ const Cart = () => {
             </button>
             
             <p className="text-[10px] text-gray-400 text-center mt-4 uppercase tracking-[0.1em]">
-              Redirect to chat for bank details
+              You will confirm delivery and payment details in WhatsApp
             </p>
           </div>
         </div>

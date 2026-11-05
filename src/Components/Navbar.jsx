@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ShoppingCart, User, Share2, Menu, X, LogOut } from 'lucide-react'; // Added LogOut icon
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { useCart } from '../Context/CartContext';
 import Logo from '../assets/Logo.jpeg';
 import { useAuth } from '../Context/AuthContext';
@@ -12,8 +12,7 @@ const Navbar = () => {
     const [isProfileOpen, setIsProfileOpen] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false); // 2. State for Modal
-    const { cartItems } = useCart(); // Use cartItems to get accurate count
-    const cartCount = cartItems?.length || 0;
+    const { cartCount } = useCart();
 
     const navLinks = [
         { name: "Home", path: "/" },
@@ -63,9 +62,9 @@ const Navbar = () => {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: index * 0.05 }}
                         >
-                            <Link to={link.path} className="hover:text-[#D4AF37] transition font-serif italic">
+                            <NavLink to={link.path} className={({ isActive }) => `transition font-serif italic ${isActive ? 'text-[#D4AF37]' : 'hover:text-[#D4AF37]'}`}>
                                 {link.name}
-                            </Link>
+                            </NavLink>
                         </motion.div>
                     ))}
                 </div>
@@ -175,13 +174,13 @@ const Navbar = () => {
                                             animate={{ opacity: 1, x: 0 }}
                                             transition={{ delay: index * 0.1 + 0.2 }}
                                         >
-                                            <Link
+                                            <NavLink
                                                 to={link.path}
                                                 onClick={() => setIsMobileMenuOpen(false)}
-                                                className="block py-2 border-b border-gray-100 hover:text-[#D4AF37] transition italic"
+                                                className={({ isActive }) => `block py-2 border-b border-gray-100 transition italic ${isActive ? 'text-[#D4AF37]' : 'hover:text-[#D4AF37]'}`}
                                             >
                                                 {link.name}
-                                            </Link>
+                                            </NavLink>
                                         </motion.div>
                                     ))}
                                 </nav>

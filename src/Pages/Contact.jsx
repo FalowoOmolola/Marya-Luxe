@@ -4,7 +4,7 @@ import { MessageCircle, Phone, Mail } from 'lucide-react';
 const Contact = () => (
   <div className="pt-32 pb-20 bg-white min-h-screen px-6 flex items-center justify-center">
     <div className="max-w-2xl w-full bg-[#FAF9F6] rounded-[3rem] p-12 text-center border border-gray-100 shadow-xl">
-      <h2 className="text-3xl font-serif mb-2 italic">Connect with Mariam</h2>
+      <h2 className="text-3xl font-serif mb-2 italic">Connect with Marya Luxe</h2>
       <p className="text-gray-400 mb-10 italic">~Marya Luxe</p>
       
       <div className="space-y-4 text-left">

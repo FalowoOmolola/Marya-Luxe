@@ -9,6 +9,7 @@ import ProductDetail from './Pages/ProductDetail';
 import Navbar from './Components/Navbar';
 import Footer from './Components/Footer';
 import Cart from './Pages/Cart';
+import CartToast from './Components/CartToast';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
       </main>
 
       <Footer />
+      <CartToast />
     </div>
   );
 }
